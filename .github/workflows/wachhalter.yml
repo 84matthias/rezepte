@@ -1,0 +1,59 @@
+# Supabase-Wachhalter
+# Fragt alle 3 Tage die Supabase-Datenbank ab, damit das kostenlose Projekt
+# nicht wegen Inaktivität pausiert wird. Schreibt danach eine kleine
+# Protokolldatei ins Repository, damit GitHub den Zeitplan nicht nach
+# 60 Tagen ohne Aktivität abschaltet.
+#
+# Ablageort im Repository:  .github/workflows/wachhalter.yml
+# Benötigte Secrets:        SUPABASE_URL, SUPABASE_KEY
+
+name: Supabase-Wachhalter
+
+on:
+  schedule:
+    # Minute Stunde Tag Monat Wochentag (Zeit in UTC)
+    # = jeden 3. Tag um 06:17 UTC (07:17 Uhr Winterzeit, 08:17 Uhr Sommerzeit)
+    - cron: "17 6 */3 * *"
+  # erlaubt das Starten von Hand über "Run workflow"
+  workflow_dispatch:
+
+permissions:
+  contents: write   # nötig, um die Protokolldatei zu speichern
+
+jobs:
+  wachhalten:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository holen
+        uses: actions/checkout@v4
+
+      - name: Supabase abfragen
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          set -e
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
+            echo "Fehler: Secret SUPABASE_URL oder SUPABASE_KEY fehlt."
+            exit 1
+          fi
+          URL="${SUPABASE_URL%/}"   # entfernt einen eventuellen Schrägstrich am Ende
+          antwort=$(curl -sS --fail-with-body \
+            -H "apikey: $SUPABASE_KEY" \
+            "$URL/rest/v1/wachhalter?select=id&limit=1")
+          echo "Antwort der Datenbank: $antwort"
+          if ! echo "$antwort" | grep -q '"id"'; then
+            echo "Fehler: Die Datenbank hat keine Daten geliefert."
+            echo "Ist die Tabelle 'wachhalter' angelegt und die Lese-Regel aktiv?"
+            exit 1
+          fi
+          echo "Datenbank erreichbar."
+
+      - name: Protokoll aktualisieren
+        run: |
+          echo "Letzter erfolgreicher Lauf: $(TZ=Europe/Berlin date '+%d.%m.%Y um %H:%M Uhr')" > wachhalter-protokoll.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add wachhalter-protokoll.txt
+          git commit -m "Wachhalter: Lauf vom $(date -u +%F)" || echo "Keine Änderung zu speichern."
+          git push
