@@ -38,10 +38,22 @@ jobs:
             exit 1
           fi
           URL="${SUPABASE_URL%/}"   # entfernt einen eventuellen Schrägstrich am Ende
-          antwort=$(curl -sS --fail-with-body \
+          echo "Abgefragte Adresse: $URL/rest/v1/wachhalter (URL-Secret wird von GitHub als *** angezeigt)"
+          case "$URL" in
+            https://*.supabase.co) ;;
+            *) echo "Fehler: SUPABASE_URL muss die Form https://<kennung>.supabase.co haben – ohne weiteren Pfad."
+               exit 1 ;;
+          esac
+          status=$(curl -sS -o antwort.txt -w "%{http_code}" \
             -H "apikey: $SUPABASE_KEY" \
             "$URL/rest/v1/wachhalter?select=id&limit=1")
+          antwort=$(cat antwort.txt); rm -f antwort.txt
+          echo "HTTP-Status: $status"
           echo "Antwort der Datenbank: $antwort"
+          if [ "$status" != "200" ]; then
+            echo "Fehler: Supabase hat mit Status $status geantwortet (siehe Antwort oben)."
+            exit 1
+          fi
           if ! echo "$antwort" | grep -q '"id"'; then
             echo "Fehler: Die Datenbank hat keine Daten geliefert."
             echo "Ist die Tabelle 'wachhalter' angelegt und die Lese-Regel aktiv?"
