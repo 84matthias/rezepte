@@ -53,7 +53,7 @@ a{color:var(--accent-ink)}
 .ib:hover{background:var(--accent-tint)}
 .ib svg{width:22px;height:22px}
 
-main{max-width:980px;margin:0 auto;padding:14px 14px calc(110px + var(--safe-b))}
+main{max-width:980px;margin:0 auto;padding:14px 14px calc(40px + var(--safe-b))}
 
 /* ---------- Knöpfe ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line2);background:var(--paper);border-radius:var(--rs);padding:10px 16px;cursor:pointer;font-weight:500;min-height:44px;text-decoration:none;color:var(--ink)}
@@ -64,8 +64,6 @@ main{max-width:980px;margin:0 auto;padding:14px 14px calc(110px + var(--safe-b))
 .btn.danger:hover{background:#fbeceb;border-color:var(--bad)}
 .btn.block{width:100%}
 .btn:disabled{opacity:.55;cursor:default}
-.fab{position:fixed;right:max(18px,calc(50vw - 472px));bottom:calc(20px + var(--safe-b));z-index:15;width:60px;height:60px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:32px;line-height:1;cursor:pointer;box-shadow:0 6px 18px rgba(150,63,32,.35);display:grid;place-items:center}
-.fab:hover{background:var(--accent-ink)}
 
 /* ---------- Suche & Filter ---------- */
 .search{position:relative;margin:4px 0 12px}
@@ -95,8 +93,10 @@ main{max-width:980px;margin:0 auto;padding:14px 14px calc(110px + var(--safe-b))
 .kgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .kk{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;border:1px solid color-mix(in srgb,var(--kf,#2a2420) 24%,var(--line2));background:var(--paper);border-radius:12px;padding:8px 6px 7px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink);transition:background .12s,color .12s}
 .kk .ico{width:23px;height:23px;color:var(--kf,var(--muted))}
-.kk .l,.ks .l{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ks .l{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kk .l{min-width:0;max-width:100%;text-align:center;line-height:1.2;overflow-wrap:anywhere}
 .kk .n{position:absolute;top:5px;right:8px;font-size:11.5px;font-weight:600;color:var(--muted)}
+.kk.alle{--kf:#2a2420}
 .kk.on{background:var(--kf);border-color:var(--kf);color:#fff}
 .kk.on .ico,.kk.on .n{color:#fff}
 /* Untergliederung (erscheint nur, wenn die Kategorie gewählt ist) */
@@ -139,11 +139,13 @@ main{max-width:980px;margin:0 auto;padding:14px 14px calc(110px + var(--safe-b))
 .empty{text-align:center;color:var(--muted);padding:50px 20px}
 .empty .ico{width:54px;height:54px;color:var(--accent);opacity:.6;margin-bottom:8px}
 /* Begrüßung auf der Übersicht */
-.welcome{position:relative;display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#fff8ef 0%,#fbe6d6 100%);border-radius:var(--r);padding:10px 10px 12px 14px;margin:2px 0 12px;box-shadow:var(--shadow);overflow:hidden}
+.welcome{position:relative;display:grid;grid-template-columns:1fr auto;grid-template-areas:'sub akt' 'btns btns';align-items:center;column-gap:8px;row-gap:6px;background:linear-gradient(135deg,#fff8ef 0%,#fbe6d6 100%);border-radius:var(--r);padding:10px 10px 12px 14px;margin:2px 0 12px;box-shadow:var(--shadow);overflow:hidden}
 .welcome .txt{flex:1;min-width:0;position:relative;z-index:1}
 .welcome .hi{margin:0;font:italic 500 15px var(--serif);color:var(--accent-ink)}
 .welcome h2{margin:2px 0 4px;font:600 24px/1.15 var(--serif)}
-.welcome .sub{margin:0 0 7px;color:var(--muted);font-size:13.5px}
+.welcome .sub{grid-area:sub;margin:0;color:var(--muted);font-size:13.5px}
+.welcome .wakt{grid-area:akt;display:flex;gap:8px}
+.welcome .wbtns{grid-area:btns}
 .welcome .btn{min-height:38px;padding:6px 11px;gap:5px;font-size:14px;background:rgba(255,255,255,.8)}
 .welcome h2{margin-top:0}
 .wbtns{display:flex;flex-wrap:wrap;gap:7px}
@@ -151,7 +153,10 @@ main{max-width:980px;margin:0 auto;padding:14px 14px calc(110px + var(--safe-b))
 .welcome .btn.schnell.on .ico{color:#fff}
 .welcome .btn .ico{width:17px;height:17px;color:var(--accent)}
 .welcome svg.ill{width:112px;height:auto;flex:none;margin:-6px 0 -10px 0}
-.welcome .wmenu{align-self:center;flex:none;width:40px;height:40px;margin:0;background:rgba(255,255,255,.65)}
+.welcome .wmenu,.welcome .wplus{flex:none;width:40px;height:40px;margin:0;padding:0;background:rgba(255,255,255,.65)}
+.welcome .wplus{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(150,63,32,.3)}
+.welcome .wplus:hover{background:var(--accent-ink)}
+.welcome .wplus svg,.welcome .wmenu svg{width:22px;height:22px;display:block}
 .welcome .wmenu:hover{background:#fff}
 .empty h2{font:600 22px var(--serif);color:var(--ink);margin:0 0 6px}
 
@@ -281,7 +286,6 @@ textarea.in{min-height:150px;line-height:1.55;resize:vertical}
   <div class="gingham"></div>
 </header>
 <main id="view"><div class="loading"><div class="spin"></div>Wird geladen …</div></main>
-<button class="fab" id="fab" hidden aria-label="Neues Rezept">+</button>
 <div id="overlay"></div>
 <input type="file" id="importFile" accept=".json,application/json" hidden>
 
@@ -295,7 +299,7 @@ textarea.in{min-height:150px;line-height:1.55;resize:vertical}
 const SUPABASE_URL = 'https://rmvlbukmvwntoflkttqx.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Jtx0l0nXGqxsX8XtS84anA_2QGAfkUI';
 
-const KATEGORIEN = ['Vorspeise','Salat','Hauptgericht','Nachtisch','Kuchen','Gebäck'];
+const KATEGORIEN = ['Vorspeise','Salat','Hauptgericht','Nachtisch','Kuchen & Gebäck'];
 const ICON_PFADE = {
   topf:'<path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20"/><path d="M9 6.5c0-1.2 1.2-1.2 1.2-2.5M13.8 6.5c0-1.2 1.2-1.2 1.2-2.5"/>',
   suppe:'<path d="M3 11h18a9 9 0 0 1-18 0z"/><path d="M8 7.5c0-1.3 1.2-1.3 1.2-2.6M12 7.5c0-1.3 1.2-1.3 1.2-2.6M16 7.5c0-1.3 1.2-1.3 1.2-2.6"/>',
@@ -319,16 +323,15 @@ const KAT_STIL = {
   'Salat':           { f:'#3b8048', b:'#e1efe2', i:'salat' },
   'Hauptgericht':    { f:'#b9532f', b:'#f8e3d7', i:'topf' },
   'Nachtisch':       { f:'#a83d6a', b:'#f7e0e9', i:'eis' },
-  'Kuchen':          { f:'#a86d0c', b:'#f8ebcf', i:'kuchen' },
-  'Gebäck':          { f:'#87562a', b:'#f1e3d0', i:'gebaeck' }
+  'Kuchen & Gebäck': { f:'#a86d0c', b:'#f8ebcf', i:'kuchen' }
 };
-const SUB_ICON = { Suppe:'suppe', Ofen:'ofen', Pfanne:'pfanne', Topf:'topf', Vegetarisch:'moehre' };
+const SUB_ICON = { Suppe:'suppe', Ofen:'ofen', Pfanne:'pfanne', Eintopf:'topf', Vegetarisch:'moehre', Kuchen:'kuchen', 'Gebäck':'gebaeck' };
 function katStil(k){ return KAT_STIL[k] || { f:'#7b7068', b:'#efe7dc', i:'besteck' }; }
 function katVars(k){ const st = katStil(k); return `--kf:${st.f};--kb:${st.b}`; }
 function icon(name, cls){ return `<svg class="ico${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON_PFADE[name] || ICON_PFADE.besteck}</svg>`; }
 function rezeptIcon(r){ return SUB_ICON[r.unterkategorie] || katStil(r.kategorie).i; }
 // Unterkategorien (weitere lassen sich hier einfach ergänzen, z. B. 'Nachtisch': ['Creme','Eis'])
-const UNTERKATEGORIEN = { 'Hauptgericht': ['Suppe','Ofen','Pfanne','Topf','Vegetarisch'] };
+const UNTERKATEGORIEN = { 'Hauptgericht': ['Suppe','Ofen','Pfanne','Eintopf','Vegetarisch'], 'Kuchen & Gebäck': ['Kuchen','Gebäck'] };
 const LIST_FIELDS = 'id,titel,kategorie,tags,portionen,zeit_min,bewertung,unterkategorie,thumb,zutaten,erstellt_am,geaendert_am';
 
 /* ============================================================
@@ -576,7 +579,7 @@ async function route(keepScroll){
   closeMenu(); einfuegenZu();
   if (r.name !== 'kochen') kochenBeenden();
   if (!sb) return;
-  if (!USER){ $('#fab').hidden = true; $('#view').innerHTML = viewLogin(); $('#loginForm').addEventListener('submit', login); return; }
+  if (!USER){ $('#view').innerHTML = viewLogin(); $('#loginForm').addEventListener('submit', login); return; }
   const y = window.scrollY;
   if (r.name === 'liste'){
     $('#view').innerHTML = viewListe();
@@ -585,7 +588,7 @@ async function route(keepScroll){
   }
   if (r.name === 'neu'){ if (!keepScroll) formStart(null); return; }
   // Ansichten, die das vollständige Rezept brauchen
-  if (!keepScroll || !FULL.has(r.id)) { $('#view').innerHTML = `<div class="loading"><div class="spin"></div>Rezept wird geladen …</div>`; setTop('', true); $('#fab').hidden = true; }
+  if (!keepScroll || !FULL.has(r.id)) { $('#view').innerHTML = `<div class="loading"><div class="spin"></div>Rezept wird geladen …</div>`; setTop('', true); }
   let rez;
   try { rez = await ladeRezept(r.id); } catch(e){ fehler(e, 'Rezept konnte nicht geladen werden'); }
   if (seq !== routeSeq) return;
@@ -632,17 +635,20 @@ function gefiltert(){
 }
 function viewListe(){
   setTop('', false);
-  $('#fab').hidden = false;
   if (!LOADED) return `<div class="loading"><div class="spin"></div>Rezepte werden geladen …</div>`;
   const kats = alleKategorien();
   if (UI.kat && !kats.includes(UI.kat)) UI.kat = '';
-  if (!REZEPTE.length) return `<div class="empty">${icon('topf')}<h2>Noch keine Rezepte</h2><p>Tippe unten rechts auf <b>+</b>, um das erste Rezept anzulegen.</p></div>`;
+  if (!REZEPTE.length) return `<div class="empty">${icon('topf')}<h2>Noch keine Rezepte</h2><p>Tippe oben auf <b>+</b>, um das erste Rezept anzulegen.</p></div>`;
   return `
-    <section class="welcome"><div class="txt">
+    <section class="welcome">
       <p class="sub">${REZEPTE.length} ${REZEPTE.length === 1 ? 'Rezept' : 'Rezepte'} in eurer Sammlung</p>
+      <div class="wakt">
+        <button class="ib wplus" data-a="neu" aria-label="Neues Rezept" title="Neues Rezept"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button class="ib wmenu" data-a="menu" aria-label="Menü"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      </div>
       <div class="wbtns"><button class="btn" data-a="zufall">${icon('wuerfel')} Überrasch mich</button>
-        <button class="btn schnell${UI.schnell ? ' on' : ''}" data-a="schnell" aria-pressed="${UI.schnell ? 'true' : 'false'}" title="Nur Rezepte mit höchstens 30 Minuten">${icon('uhr')} Schnell</button></div></div>
-      <button class="ib wmenu" data-a="menu" aria-label="Menü"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></section>
+        <button class="btn schnell${UI.schnell ? ' on' : ''}" data-a="schnell" aria-pressed="${UI.schnell ? 'true' : 'false'}" title="Nur Rezepte mit höchstens 30 Minuten">${icon('uhr')} Schnell</button></div>
+    </section>
     <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
       <input type="search" id="q" placeholder="Rezept oder Zutat suchen …" value="${esc(UI.q)}" autocomplete="off" enterkeyhint="search"></div>
     <div id="listbody">${listBody(kats)}</div>`;
@@ -654,11 +660,12 @@ function katKachel(k){
   return `<button class="kk${on ? ' on' : ''}" style="${katVars(k)}" data-a="kat" data-v="${esc(k)}" aria-pressed="${on}">${icon(katStil(k).i)}<span class="l">${esc(k)}</span><span class="n">${n || ''}</span></button>`;
 }
 function katPanel(kats){
-  let h = `<div class="kgrid">${kats.map(katKachel).join('')}</div>`;
+  const alle = `<button class="kk alle${!UI.kat ? ' on' : ''}" data-a="katweg" aria-pressed="${!UI.kat}">${icon('besteck')}<span class="l">Alle</span><span class="n">${REZEPTE.length || ''}</span></button>`;
+  let h = `<div class="kgrid">${alle}${kats.map(katKachel).join('')}</div>`;
   const k = UI.kat;
   if (k && UNTERKATEGORIEN[k]){
     h += `<div class="kgruppe" style="${katVars(k)}"><div class="kg-subs">
-      <button class="ks${!UI.sub ? ' on' : ''}" data-a="sub" data-k="${esc(k)}" data-v=""><span class="l">Alle ${esc(k === 'Hauptgericht' ? 'Hauptgerichte' : k)}</span><span class="n">${anzahl(k) || ''}</span></button>
+      <button class="ks${!UI.sub ? ' on' : ''}" data-a="sub" data-k="${esc(k)}" data-v=""><span class="l">Alle</span><span class="n">${anzahl(k) || ''}</span></button>
       ${UNTERKATEGORIEN[k].map(u => `<button class="ks${UI.sub === u ? ' on' : ''}" data-a="sub" data-k="${esc(k)}" data-v="${esc(u)}">${icon(SUB_ICON[u] || 'besteck')}<span class="l">${esc(u)}</span><span class="n">${anzahl(k, u) || ''}</span></button>`).join('')}
     </div></div>`;
   }
@@ -695,7 +702,7 @@ function karte(r){
    ============================================================ */
 function viewDetail(r){
   setTop('', true);
-  $('#fab').hidden = true;
+  
   if (DETAIL.id !== r.id){ DETAIL.id = r.id; DETAIL.port = null; DETAIL.doneZ = new Set(); DETAIL.doneS = new Set(); }
   const basis = Number(r.portionen) || 1, port = DETAIL.port ?? basis, f = port / basis;
   const zut = r.zutaten || [], schr = r.schritte || [];
@@ -814,7 +821,7 @@ function formStart(r){
   FORM = { id: r ? r.id : null, foto: r ? r.foto : null, thumb: r ? r.thumb : null, fotoNeu:false };
   EDIT_DIRTY = false;
   setTop(r ? 'Rezept bearbeiten' : 'Neues Rezept', true);
-  $('#fab').hidden = true;
+  
   const alleTags = [...new Set(REZEPTE.flatMap(x => x.tags || []))].sort((a, b) => a.localeCompare(b, 'de'));
   const alleKats = alleKategorien();
   if (r && r.kategorie && !alleKats.includes(r.kategorie)) alleKats.push(r.kategorie);
@@ -878,8 +885,8 @@ async function fotoGewaehlt(e){
    ============================================================ */
 let UI_EINFUEGEN = false;
 const VORLAGE = `Titel: Omas Apfelkuchen
-Kategorie: Kuchen
-Art:
+Kategorie: Kuchen & Gebäck
+Art: Kuchen
 Portionen: 12
 Zeit: 75
 Tags: Sonntag, Klassiker
@@ -912,12 +919,12 @@ function zeitErkennen(t){
 function katErkennen(t){
   const n = norm(t);
   let kat = '', sub = '';
-  if (/suppe|eintopf|brühe|bruhe/.test(n)) { kat = 'Hauptgericht'; sub = /eintopf/.test(n) ? 'Topf' : 'Suppe'; }
+  if (/suppe|eintopf|brühe|bruhe/.test(n)) { kat = 'Hauptgericht'; sub = /eintopf/.test(n) ? 'Eintopf' : 'Suppe'; }
   else if (/salat/.test(n)) kat = 'Salat';
   else if (/vorspeise|antipasti|fingerfood/.test(n)) kat = 'Vorspeise';
   else if (/nachtisch|nachspeise|dessert|mousse|pudding|creme|tiramisu|eis\b|kompott|grutze/.test(n)) kat = 'Nachtisch';
-  else if (/gebäck|gebaeck|geback|muffin|cupcake|platzchen|keks|cookie|brotchen|brezel|hornchen|croissant|zopf|waffel|makrone|schnecke/.test(n)) kat = 'Gebäck';
-  else if (/kuchen|torte|strudel|tarte|brownie|brot/.test(n)) kat = 'Kuchen';
+  else if (/gebäck|gebaeck|geback|muffin|cupcake|platzchen|keks|cookie|brotchen|brezel|hornchen|croissant|zopf|waffel|makrone|schnecke/.test(n) && !/kuchen\s*(&|und)/.test(n)) { kat = 'Kuchen & Gebäck'; sub = 'Gebäck'; }
+  else if (/kuchen|torte|strudel|tarte|brownie|brot/.test(n)) { kat = 'Kuchen & Gebäck'; sub = /kuchen\s*(&|und)/.test(n) ? '' : 'Kuchen'; }
   else if (/hauptgericht|hauptspeise/.test(n)) kat = 'Hauptgericht';
   for (const k of KATEGORIEN) if (norm(k) === n.trim()) kat = k;
   if (/auflauf|gratin|ofen|lasagne/.test(n)) { kat = kat || 'Hauptgericht'; if (kat === 'Hauptgericht') sub = 'Ofen'; }
@@ -930,8 +937,8 @@ function rezeptAusText(text){
   const feld = line => {
     let m;
     if ((m = line.match(/^(titel|name|rezept)\s*:\s*(.*)$/i))) { if (m[2]) r.titel = m[2].trim(); return true; }
-    if ((m = line.match(/^kategorie\s*:\s*(.*)$/i))) { const [k, s] = /kuchen\s*(&|und)\s*geb/i.test(m[1]) ? [katErkennen(r.titel)[0] || 'Kuchen', ''] : katErkennen(m[1]); if (k) r.kategorie = k; if (s && !r.unterkategorie) r.unterkategorie = s; return true; }
-    if ((m = line.match(/^(art|unterkategorie)\s*:\s*(.*)$/i))) { const w = m[2].trim(); const l = UNTERKATEGORIEN.Hauptgericht; const t = l.find(x => norm(x) === norm(w)) || (/auflauf/i.test(w) ? 'Ofen' : ''); if (t) r.unterkategorie = t; return true; }
+    if ((m = line.match(/^kategorie\s*:\s*(.*)$/i))) { const [k, s] = /kuchen\s*(&|und)\s*geb/i.test(m[1]) ? ['Kuchen & Gebäck', katErkennen(r.titel)[1]] : katErkennen(m[1]); if (k) r.kategorie = k; if (s && !r.unterkategorie) r.unterkategorie = s; return true; }
+    if ((m = line.match(/^(art|unterkategorie)\s*:\s*(.*)$/i))) { const w = m[2].trim(); const l = Object.values(UNTERKATEGORIEN).flat(); const t = l.find(x => norm(x) === norm(w)) || (/auflauf/i.test(w) ? 'Ofen' : /^topf$/i.test(w) ? 'Eintopf' : ''); if (t) r.unterkategorie = t; return true; }
     if ((m = line.match(/^(portionen|personen|menge|ergibt|stück)\s*:\s*(.*)$/i))) { const z = m[2].match(/\d+(?:[.,]\d+)?/); if (z) r.portionen = parseFloat(z[0].replace(',', '.')); return true; }
     if ((m = line.match(/^für\s+(\d+(?:[.,]\d+)?)\s*(personen|portionen|stück|stk|pers)\b/i))) { r.portionen = parseFloat(m[1].replace(',', '.')); return true; }
     if ((m = line.match(/^(zeit|zubereitungszeit|dauer|arbeitszeit|gesamtzeit|kochzeit|backzeit)\s*:\s*(.*)$/i))) { const z = zeitErkennen(m[2]); if (z) r.zeit_min = (r.zeit_min && !/^(zeit|gesamtzeit|dauer)$/i.test(m[1])) ? r.zeit_min : z; return true; }
@@ -977,7 +984,8 @@ function rezeptAusText(text){
     }
   } else if (kopf.length) r.notiz.unshift(...kopf);
   if (!r.kategorie){ const [k, s] = katErkennen(r.titel); r.kategorie = k; if (!r.unterkategorie) r.unterkategorie = s; }
-  if (r.kategorie !== 'Hauptgericht') r.unterkategorie = '';
+  if (r.kategorie === 'Kuchen & Gebäck' && !r.unterkategorie) r.unterkategorie = katErkennen(r.titel)[1] || 'Kuchen';
+  if (!UNTERKATEGORIEN[r.kategorie] || !UNTERKATEGORIEN[r.kategorie].includes(r.unterkategorie)) r.unterkategorie = '';
   return r;
 }
 function textInRezepte(text){
@@ -1178,6 +1186,7 @@ const ACT = {
   cookEnde(){ zurueck(); },
   menuzu(){ closeMenu(); },
   menu(el){ $('#menu') ? closeMenu() : openMenu(el); },
+  neu(){ go('#/neu'); },
   einfuegen(){ einfuegenOeffnen(); },
   einfuegenZu(){ einfuegenZu(); },
   einfuegenOk(){ einfuegenOk(); },
@@ -1202,7 +1211,6 @@ document.addEventListener('change', e => {
   if (e.target.id === 'sort'){ UI.sort = e.target.value; savePrefs(); route(true); } });
 $('#menuBtn').addEventListener('click', () => $('#menu') ? closeMenu() : openMenu($('#menuBtn')));
 $('#backBtn').addEventListener('click', zurueck);
-$('#fab').addEventListener('click', () => go('#/neu'));
 
 start();
 </script>
